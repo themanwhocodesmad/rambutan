@@ -180,3 +180,13 @@ CACHES = {
         }
     }
 }
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://default:kcGiP4bIKnGPdPopMBL131GGA3gHkN6o@monorail.proxy.rlwy.net:27421'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Johannesburg'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
