@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Your Game</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Custom CSS for Sidebar -->
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: -50%;
+            width: 50%;
+            height: 100%;
+            transition: right 0.3s;
+            z-index: 1050; /* To ensure the sidebar appears above the content */
+        }
+        #sidebar.open {
+            right: 0;
+        }
+        /* Toggle button styling */
+        #sidebarCollapse {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1051; /* To ensure the button appears above the sidebar */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Toggle Button -->
+    <div id="sidebarCollapse">
+        &#9776;
+    </div>
+
+    <div id="sidebar">
+        <!-- Sidebar Content -->
+    </div>
+
+    <div id="content" class="container">
+        <!-- Your Content -->
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Sidebar Toggle Script -->
+<script>
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('open');
+        });
+    });
+</script>
+</body>
+</html>
