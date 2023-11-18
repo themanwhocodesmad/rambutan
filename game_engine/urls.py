@@ -24,4 +24,5 @@ urlpatterns = [
     # Troops
     path("planet/<str:planet_id>/forge_with_troops/", ForgeWithTroopsView.as_view(), name="forge_with_troops"),
 
+
 ]

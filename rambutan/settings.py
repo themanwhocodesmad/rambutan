@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Applications
     'users',
     'game_engine',
+    'core',
 
     # Celery Redis
     'django_celery_beat',

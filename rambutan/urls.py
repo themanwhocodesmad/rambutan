@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("users.urls")),
     path("api/game_engine/", include("game_engine.urls")),
+    path("api/core/", include("core.urls")),
 
 ]
 
