@@ -29,7 +29,7 @@ class GameMode(models.Model):
 class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     # Use the primary key of the GameMode instance as the default value
-    game_mode = models.ForeignKey(GameMode, on_delete=models.CASCADE, default=1)
+    game_mode = models.ForeignKey(GameMode, on_delete=models.CASCADE, default=GameMode.objects.get_or_create(name='Classical')[0].id)
     display_name = models.CharField(max_length=50, unique=True)
     orion_credits = models.PositiveIntegerField(default=1000)
     population = models.PositiveIntegerField(default=0)
