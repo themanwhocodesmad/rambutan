@@ -1,11 +1,13 @@
 from rest_framework import generics, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from core.models import Fleet, Planet
-from core.serializers import FleetSerializer
-from django.shortcuts import get_object_or_404
-from logic.tasks import process_attack
+
 import math
+
+from game_engine.models import Fleet, Planet
+from game_engine.serializers import FleetSerializer
+from game_engine.utilities_functions import process_attack
 
 
 class FleetAttackView(generics.UpdateAPIView):

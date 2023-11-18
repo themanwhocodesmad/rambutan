@@ -2,16 +2,15 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from logic.tasks import add_infantry_units, add_assault_tanks, add_sentinels, add_marauders, add_harvesters, \
-    add_bombers, add_drone_troopers
-from core.constants import TROOP_COSTS, TROOPS_DATA
-from core.models import Forge, Army, Silo
+
+from game_engine.constants.game_constrants import TROOP_COSTS, TROOPS_DATA
+from game_engine.models import Forge, Army, Silo
 
 
 class ConstructInfantryView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, forge_id, count):
+    def post(self, request, forge_id, count, add_infantry_units=None):
         # Get the Forge and Army instances
         try:
             forge = Forge.objects.get(pk=forge_id)
@@ -50,7 +49,7 @@ class ConstructInfantryView(APIView):
 class ConstructAssaultTanksView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, forge_id, count):
+    def post(self, request, forge_id, count, add_assault_tanks=None):
         # Get the Forge and Army instances
         try:
             forge = Forge.objects.get(pk=forge_id)
@@ -89,7 +88,7 @@ class ConstructAssaultTanksView(APIView):
 class ConstructSentinelsView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, forge_id, count):
+    def post(self, request, forge_id, count, add_sentinels=None):
         # Get the Forge and Army instances
         try:
             forge = Forge.objects.get(pk=forge_id)
@@ -167,7 +166,7 @@ class ConstructMaraudersView(APIView):
 class ConstructHarvestersView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, forge_id, count):
+    def post(self, request, forge_id, count, add_harvesters=None):
         # Get the Forge and Army instances
         try:
             forge = Forge.objects.get(pk=forge_id)

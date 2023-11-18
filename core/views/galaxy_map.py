@@ -1,8 +1,10 @@
-from logic.utils import generate_map_data
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from core.models import Map
+
+from game_engine.models import Map
+from game_engine.utilities_functions.map_data import generate_map_data
 
 
 class GalaxyMapView(APIView):

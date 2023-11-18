@@ -15,8 +15,7 @@ Typical upgrade function cycle:
                               building.save()
 
 """
-from core.models import Mine, Silo, Map, Forge
-from core.serializers import MineSerializer, SiloSerializer, MapSerializer, ForgeSerializer
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -24,9 +23,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 import datetime
 
+from game_engine.background.logic import upgrade_silo_task, upgrade_forge_task, upgrade_map_task
 # TODO update the celery tasks and location, this is just a placeholder.
-from logic.tasks import *
+from game_engine.background.tasks import *
 from celery import app
+
+from game_engine.models import Map, Forge
+from game_engine.serializers import MineSerializer, SiloSerializer, MapSerializer, ForgeSerializer
 
 
 class BuildingUpgradeView(APIView):

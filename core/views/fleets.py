@@ -1,11 +1,11 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.models import Fleet, Forge
-from core.serializers import FleetSerializer
-from django.shortcuts import get_object_or_404
-from core.constants import TROOP_CHOICES
+from game_engine.constants.game_constrants import TROOP_CHOICES
+from game_engine.models import Fleet, Forge
+from game_engine.serializers import FleetSerializer
 
 
 # TODO: Error Handling for trying to make fleets with invalid amounts
