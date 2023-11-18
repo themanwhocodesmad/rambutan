@@ -158,8 +158,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-CSRF_TRUSTED_ORIGINS = ['https://mre.up.railway.app']
-CORS_ALLOWED_ORIGINS = ['https://mre.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://orion-test.up.railway.app']
+CORS_ALLOWED_ORIGINS = ['https://orion-test.up.railway.app']
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
