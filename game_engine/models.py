@@ -27,8 +27,10 @@ class GameMode(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='profiles')
-    game_mode = models.ForeignKey(GameMode, on_delete=models.CASCADE, related_name='profiles')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
+    # Use the primary key of the GameMode instance as the default value
+    game_mode = models.ForeignKey(GameMode, on_delete=models.CASCADE, default=1)
+    display_name = models.CharField(max_length=50, unique=True)
     orion_credits = models.PositiveIntegerField(default=1000)
     population = models.PositiveIntegerField(default=0)
     attack_points = models.PositiveIntegerField(default=0)
@@ -38,16 +40,17 @@ class UserProfile(models.Model):
     player_class = models.CharField(max_length=50, default='class1', null=True, blank=True)
     special_troops = models.JSONField(default=dict)
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.special_troops:
             self.special_troops = PLAYER_CLASS_CHOICES[self.player_class]
 
     class Meta:
-        unique_together = ('user', 'game_mode')  # Ensure each user can have only one profile per game mode
+        unique_together = ('user', 'game_mode', 'display_name')  # Ensure each user can have only one profile per game mode with a unique display name
 
     def __str__(self):
-        return f"{self.user.username} - {self.game_mode.name}"
+        return f"{self.user.username} - {self.game_mode.name} - {self.display_name}"
 
 
 def generate_random_name():
@@ -65,7 +68,7 @@ class Planet(models.Model):
     galaxy = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], editable=False)
     planet_number = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], editable=False)
     name = models.CharField(max_length=50, default=generate_random_name)
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, editable=False)
 
     class Meta:
         ordering = ['galaxy', 'planet_number']

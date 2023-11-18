@@ -1,4 +1,6 @@
 import os
+from datetime import timedelta
+import redis
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +22,10 @@ INSTALLED_APPS = [
 
     # Auth Applications
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 
     # CSS
     'bootstrap4',
@@ -33,21 +35,37 @@ INSTALLED_APPS = [
     # Knox & DRF
     'rest_framework',
     'knox',
+    'corsheaders',
 
     # Applications
-    'users.apps.UsersConfig',
-    'game_engine.apps.GameEngineConfig',
+    'users',
+    'game_engine',
+
+    # Celery Redis
+    'django_celery_beat',
+    'django_celery_results'
 
 ]
+SITE_ID = 1  # Use the primary key of your Site instance
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+REST_KNOX = {
+    'TOKEN_HEADER_PREFIX': 'Token',
+    'TOKEN_TTL': timedelta(hours=168),  # 7 day session time
+    'TOKEN_LENGTH': 8  # limit token length to 8 characters
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +73,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'rambutan.urls'
@@ -79,8 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'rambutan.wsgi.application'
 
-SITE_ID = 2
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -91,17 +106,19 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'ca2Bf4D-GDaAFGBEg*1DeAD-g1eBc4Fd',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '22764',
     }
 }
 
 AUTHENTICATION_BACKENDS = (
-    'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -118,6 +135,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# CORS_ALLOWED_ORIGINS = [
+#     'http://192.168.133.158:8000'
+# ]
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://192.168.133.158:8000'
+# ]
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Africa/Johannesburg'
@@ -129,17 +154,24 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-    }
-}
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Connect to Redis database
+
+# Use the environment variables provided by Railway.app for Redis configuration
+REDIS_HOST = 'monorail.proxy.rlwy.net'
+REDIS_PORT = '27421'
+REDIS_PASSWORD = 'kcGiP4bIKnGPdPopMBL131GGA3gHkN6o'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": REDIS_PASSWORD,
+        }
+    }
+}
