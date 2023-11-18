@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-x)w-0d1&ypkzlnsfbjeq%$o86k^n*5-n^4!m5^%##0r-a_@bud
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -64,6 +64,7 @@ REST_KNOX = {
 }
 
 MIDDLEWARE = [
+    'rambutan.middleware.print_request_middleware.PrintRequestMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -157,7 +158,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-
+CSRF_TRUSTED_ORIGINS = ['https://mre.up.railway.app']
+CORS_ALLOWED_ORIGINS = ['https://mre.up.railway.app']
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 # Connect to Redis database
 
 # Use the environment variables provided by Railway.app for Redis configuration
